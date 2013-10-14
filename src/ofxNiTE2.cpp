@@ -127,10 +127,10 @@ void UserTracker::onNewFrame(nite::UserTracker &tracker)
 	}
 }
 
-ofPixels UserTracker::getPixelsRef(int near, int far, bool invert)
+ofPixels UserTracker::getPixelsRef(int near_val, int far_val, bool invert)
 {
 	ofPixels pix;
-	ofxNI2::depthRemapToRange(getPixelsRef(), pix, near, far, invert);
+	ofxNI2::depthRemapToRange(getPixelsRef(), pix, near_val, far_val, invert);
 	return pix;
 }
 

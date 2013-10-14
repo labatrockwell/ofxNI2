@@ -237,10 +237,10 @@ public:
 	
 	void begin();
 	
-	inline void setNear(float near) { near_value = near; }
+	inline void setNear(float near_val) { near_value = near_val; }
 	inline float getNear() const { return near_value; }
 	
-	inline void setFar(float far) { far_value = far; }
+	inline void setFar(float far_val) { far_value = far_val; }
 	inline float getFar() const { return far_value; }
 	
 protected:

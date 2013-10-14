@@ -29,7 +29,12 @@ namespace ofxNI2
 		if (ofFile::doesFileExist("Drivers", false))
 		{
 			string path = "Drivers";
+#ifdef TARGET_OSX
+			// to-do: fix for win
 			setenv("OPENNI2_DRIVERS_PATH", path.c_str(), 1);
+#else if TARGET_WIN32
+			_putenv_s("OPENNI2_DRIVERS_PATH", path.c_str());
+#endif
 			assert_error(openni::OpenNI::initialize());
 		}
 		else
@@ -471,10 +476,10 @@ void DepthStream::updateTextureIfNeeded()
 	Stream::updateTextureIfNeeded();
 }
 
-ofPixels DepthStream::getPixelsRef(int near, int far, bool invert)
+ofPixels DepthStream::getPixelsRef(int near_val, int far_val, bool invert)
 {
 	ofPixels pix;
-	depthRemapToRange(getPixelsRef(), pix, near, far, invert);
+	depthRemapToRange(getPixelsRef(), pix, near_val, far_val, invert);
 	return pix;
 }
 
