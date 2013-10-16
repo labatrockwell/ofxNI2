@@ -31,7 +31,7 @@ namespace ofxNI2
 #ifdef TARGET_OSX
 		bDriversPresent = ofFile::doesFileExist("Drivers", false);
 #else if TARGET_WIN32
-		bDriversPresent = ofFile::doesFileExist("Drivers", true);
+		bDriversPresent = ofFile::doesFileExist(ofToDataPath("../OpenNI2/Drivers"), true);
 #endif
 
 		if (bDriversPresent)
@@ -41,6 +41,7 @@ namespace ofxNI2
 			// to-do: fix for win
 			setenv("OPENNI2_DRIVERS_PATH", path.c_str(), 1);
 #else if TARGET_WIN32
+			path = "../OpenNI2/Drivers";
 			_putenv_s("OPENNI2_DRIVERS_PATH", ofToDataPath(path, true).c_str());
 #endif
 			return assert_error(openni::OpenNI::initialize());
