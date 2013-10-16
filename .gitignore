@@ -1,2 +1,14 @@
 .DS_Store
 
+*/bin/*.dll
+*/bin/*.exe
+*/bin/*.ini
+*/bin/*.exp
+*/bin/*.ilk
+*/bin/*.lib
+*/bin/*.pdb
+*/*.v11.*
+*/bin/OpenNI2
+*/bin/OpenNI2/*
+*/bin/NiTE2
+*/bin/NiTE2/*

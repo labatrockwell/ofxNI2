@@ -91,9 +91,10 @@ bool Device::setup()
 	return bOpened;
 }
 
-void Device::setup(int device_id)
+bool Device::setup(int device_id)
 {
-	ofxNI2::init();
+	bool bOpened = ofxNI2::init();
+	if (!bOpened) return false;
 	
 	openni::Array<openni::DeviceInfo> deviceList;
 	openni::OpenNI::enumerateDevices(&deviceList);
@@ -104,11 +105,14 @@ void Device::setup(int device_id)
 		ofLogFatalError("ofxNI2::Device") << "invalid device id";
 		
 		listDevices();
-		ofExit();
+		//ofExit();
+		return false;
 	}
 	
-	assert_error(device.open(deviceList[device_id].getUri()));
-	assert_error(device.setDepthColorSyncEnabled(true));
+	bOpened = assert_error(device.open(deviceList[device_id].getUri()));
+	if (!bOpened) return false;
+	bOpened = assert_error(device.setDepthColorSyncEnabled(true));
+	return bOpened;
 }
 
 void Device::setup(string oni_file_path)

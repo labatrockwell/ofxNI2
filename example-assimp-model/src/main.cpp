@@ -6,7 +6,9 @@ int main()
 {
 	ofAppGlutWindow window; // create a window
 	// set width, height, mode (OF_WINDOW or OF_FULLSCREEN)
-    window.setGlutDisplayString("rgba double samples>=8 depth");
+#ifdef TARGET_OSX
+    window.setGlutDisplayString("rgba double samples>=4 depth");
+#endif
 	ofSetupOpenGL(&window, 1280, 720, OF_WINDOW);
 	ofRunApp(new testApp()); // start the app
 }
