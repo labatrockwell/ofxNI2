@@ -4,11 +4,12 @@
 
 namespace ofxNI2
 {
-	void assert_error(openni::Status rc)
+	bool assert_error(openni::Status rc)
 	{
-		if (rc == openni::STATUS_OK) return;
+		if (rc == openni::STATUS_OK) return true;
 		ofLogError("ofxNI2") << openni::OpenNI::getExtendedError();
-		throw;
+		//throw;
+		return false;
 	}
 
 	void check_error(openni::Status rc)
@@ -17,30 +18,38 @@ namespace ofxNI2
 		ofLogError("ofxNI2") << openni::OpenNI::getExtendedError();
 	}
 
-	void init()
+	bool init()
 	{
 		static bool inited = false;
-		if (inited) return;
+		if (inited) return true;
 		inited = true;
 
 		// initialize oF path, don't comment out
 		ofToDataPath(".");
-		
-		if (ofFile::doesFileExist("Drivers", false))
+
+		bool bDriversPresent = false;
+#ifdef TARGET_OSX
+		bDriversPresent = ofFile::doesFileExist("Drivers", false);
+#else if TARGET_WIN32
+		bDriversPresent = ofFile::doesFileExist("Drivers", true);
+#endif
+
+		if (bDriversPresent)
 		{
 			string path = "Drivers";
 #ifdef TARGET_OSX
 			// to-do: fix for win
 			setenv("OPENNI2_DRIVERS_PATH", path.c_str(), 1);
 #else if TARGET_WIN32
-			_putenv_s("OPENNI2_DRIVERS_PATH", path.c_str());
+			_putenv_s("OPENNI2_DRIVERS_PATH", ofToDataPath(path, true).c_str());
 #endif
-			assert_error(openni::OpenNI::initialize());
+			return assert_error(openni::OpenNI::initialize());
 		}
 		else
 		{
 			ofLogError("ofxNI2") << "libs not found";
-			ofExit(-1);
+			//ofExit(-1);
+			return false;
 		}
 	}
 }
@@ -72,12 +81,13 @@ Device::~Device()
 {
 }
 
-void Device::setup()
+bool Device::setup()
 {
-	ofxNI2::init();
+	bool bOpened = ofxNI2::init();
 	
 	assert_error(device.open(openni::ANY_DEVICE)); 
 	assert_error(device.setDepthColorSyncEnabled(true));
+	return bOpened;
 }
 
 void Device::setup(int device_id)

@@ -9,7 +9,7 @@
 
 namespace ofxNI2
 {
-	void init();
+	bool init();
 	
 	class Device;
 	class Stream;
@@ -37,7 +37,7 @@ public:
 	
 	static int listDevices();
 	
-	void setup();
+	bool setup();
 	void setup(int device_id);
 	void setup(string oni_file_path);
 	
