@@ -86,8 +86,9 @@ bool Device::setup()
 {
 	bool bOpened = ofxNI2::init();
 	
-	assert_error(device.open(openni::ANY_DEVICE)); 
-	assert_error(device.setDepthColorSyncEnabled(true));
+	bOpened = assert_error(device.open(openni::ANY_DEVICE));
+	if (!bOpened) return false;
+	bOpened = assert_error(device.setDepthColorSyncEnabled(true));
 	return bOpened;
 }
 
